@@ -1,0 +1,155 @@
+<center>
+# MATH 261: Assignment #3
+### <span style="color:limegreen">**Charlotte Zhao **</span>
+<span style="color:red">**Due Date:** Wednesday, 2/22/2023, by 11:59 PM </span>
+</center>
+
+\
+
+<h3><span style="color:red">**Important Instructions:**</span></h3>
+- **Work independently and do not consult or share anything with anyone. If it happens, I will immediately inform the appropriate authorities for their quick action. ** \
+
+- **Show both your R codes and results in the HTML file.**\
+- **Save your .RMD file/.HTML file as your Last Name_A3.RMD/Last Name_A3.HTML**\
+- **Submit your Assignment #3 (both .RMD and .HTML files) on Moodle.** \
+- **You must follow the <span style="text-decoration:underline"> 
+[DePauw's Academic Integrity Policy.](https://www.depauw.edu/academics/academic-resources/academic-integrity/)</span>
+**
+
+___
+
+\
+\
+
+<span style="color:blue">
+**Q1.** Read the paper linked to Moodle and write your key findings between 225 and 250 words.</span>
+<div style="float: right"><span style="color:blue">[4 pts.]</span></div>\
+\
+
+  The article talks about the important of data ethics in both undergraduate curriculum and real world practices. As social medias, e-commerce goes fast these days, they ask for more data and personal information. For the consumers, it is hard and not applicable to read all of the instructions and contract for giving personal information during daily life. It is vulnerable for consumers, especially for the minor people who are facing the bias.
+  \
+  Although ethical issues are important, many people did not pay enough attention to the data ethics, including in the data collection and analysis. The articles give us many examples of the illegal collection and application of the data and personal information. 
+\
+  As a result, we should build our expertise in applying data ethics in the following application. Also, we can have the ethics related courses to protect the consumers and ourselves as we are also consumers in other websites. We should also follow the legal requirement and ethics to collect the data in the following projects or internships.
+
+\
+<span style="color:blue">  
+**Q2.** Download the data set `tipsnew.csv` from the course Moodle site and save it on your computer. Now answer the following questions:
+<div style="float: right">[1+1+2=4 pts.]</div>
+\
+
+(a) Read the file from your saved folder and display only the first seven rows of the data set. 
+\
+```{r}
+tip<-read.csv("tips.csv")
+head(tip)
+is.data.frame(tip)
+```
+
+\
+
+(b) Suppose the total bill wrongly entered $22.67 into row number 242, and you want to fix it by inserting the correct value in the data frame. Write a code to replace $22.67 with 29.50 and print the last seven records.
+\
+
+```{r}
+tip$totbill[tip$obs==242]<-29.5
+tail(tip)
+```
+
+(c) Create a frequency distribution table including percentages for the sex of the person paying for the meal. Write a summary sentence using your table.  
+\
+```{r}
+mytable<-table(tip$sex);mytable
+perc<-prop.table(mytable);perc
+print("35.66% are female and 64.34% are male in the data frame. ")
+
+
+```
+
+\
+
+<span style="color:blue">  
+**Q3.** Download the data set `demographic.csv` from the course Moodle site and save it on your hard drive. Now answer the following questions:
+<div style="float: right">[7 pts.]</div>
+\
+
+(a) Read the dataset `demographic.csv` called `demo`. Print the total number of variables and their names. 
+\
+```{r}
+demo<-read.csv("demographic.csv")
+head(demo)
+is.data.frame(demo)
+names(demo)
+length(demo)    #number of variables
+```
+
+
+(b) Keep only variables State, Census.region, InfMortRate, Teacher.Pay.., and X.noHS in a new dataframe called `demo1`. Print the last 10 rows. 
+\
+
+```{r}
+State<-demo$State
+Census.region<-demo$Census.region
+InfMortRate<-demo$InfMortRate
+X.noHS<-demo$X.noHS
+Teacher.Pay<-demo$Teacher.Pay
+demo1<-data.frame(State,Census.region,InfMortRate,X.noHS,Teacher.Pay)
+tail(demo1,n=10)
+colnames(demo1)
+```
+
+
+(c) Rename the columns Census.region to region, Teacher.Pa.. to teachPay, and X.noHS to noHighSchool in for the data set `demo1`. Print the first 10 records of `demo1`.
+\
+
+```{r}
+colnames(demo1)[colnames(demo1)=="Census.region"]<-"region"
+colnames(demo1)[colnames(demo1)=="Teacher.pay"]<-"teachPay"
+colnames(demo1)[colnames(demo1)=="X.noHS"]<-"noHighSchool"
+head(demo1,n=10)
+```
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Use `demo1` to answer parts (d-f):
+\
+
+(d) Perform a query to print records only who had noHighSchool<10 and InfMortRate>3.5.
+\
+```{r}
+print(demo1$noHighSchool[demo1$noHighSchool<10])
+print(demo1$InfMortRate[demo1$InfMortRate>3.5])
+```
+
+
+(e) Recode the variable teachPay<30K is 1, between 30K and less than 40K is 2, and 40K or higher is 3 into a new variable `teachSalary` in `demo1`. Print the first 10 records of the variables region, teachPay, and teachSalary. 
+\
+```{r}
+teachSalary<-NA
+demo1<-data.frame(State,Census.region,InfMortRate,X.noHS,Teacher.Pay,teachSalary)
+demo1$teachSalary[demo1$Teacher.Pay<30000]<-1
+demo1$teachSalary[demo1$Teacher.Pay>=30000&demo1$Teacher.Pay<40000]<-2
+demo1$teachSalary[demo1$Teacher.Pay>=40000]<-3
+head(demo1,n=10)
+
+```
+
+
+(f) Create a table to show the average teacher salary by census region. Write a summary sentence using your table.
+
+
+```{r}
+newtable<-table(demo1$Census.region);newtable
+midwestmean<-mean(demo1$Teacher.Pay[demo1$Census.region=="Midwest"])
+northeastmean<-mean(demo1$Teacher.Pay[demo1$Census.region=="Northeast"])
+southmean<-mean(demo1$Teacher.Pay[demo1$Census.region=="South"])
+westmean<-mean(demo1$Teacher.Pay[demo1$Census.region=="West"])
+teacher<-matrix(c(midwestmean,northeastmean,southmean,westmean),ncol=1)
+colnames(teacher)="mean salary"
+rownames(teacher)=c("midwest","northeast","south","west")
+teachertable<-as.table(teacher)
+teachertable
+```
+\
+The mean teacher salary is highest in the northeast, which is 49994. The means in the west and midwest are 43885 and 42771. The mean salary is lowest in the south, which is 41252.
+
+
+\

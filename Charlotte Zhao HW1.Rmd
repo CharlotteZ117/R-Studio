@@ -1,0 +1,72 @@
+<center>
+# MATH 261: Assignment #1
+### <span style="color:limegreen">**Charlotte Zhao**</span>
+<span style="color:red">**Due Date:** Wednesday, 2/8/2023, by 11:59 PM </span>
+</center>
+
+\
+
+<h3><span style="color:red">**Important Instructions:**</span></h3>
+- **Work independently and do not consult or share anything with anyone. If it happens, I will immediately inform the appropriate authorities for their quick action. ** \
+
+- **Show both your R codes and results in the HTML file.**\
+- **Save your .RMD file/.HTML file as your Last Name_A1.RMD/Last Name_A1.HTML**\
+- **Submit your Assignment #1 (both .RMD and .HTML files) on Moodle.** \
+- **You must follow the <span style="text-decoration:underline"> 
+[DePauw's Academic Integrity Policy.](https://www.depauw.edu/academics/academic-resources/academic-integrity/)</span>**
+\
+\
+___
+
+
+\
+\
+<span style="color:blue">
+**Q1.** Read the paper titled "A First Course in Data Science," available on Moodle. Also, read similar resources on the internet. Write a paragraph between 225 and 250 words summarizing all your ideas, such as what data science is, what we do with this discipline, etc.
+
+</span>
+<div style="float: right"><span style="color:blue">[5 pts.]</span></div>
+\
+Data science is a discipline that collect, clean, and analyze data and provide principles, predictions, and guidelines for the real world questions. Also, unlike traditional statistics in which we should come up with a hypothesis first, data science allows us to use the data first and then find the questions we are interested in later. 
+\
+Together with machine learning and statistics, the data science is used for predictive business purposes. For instance, from the online shopping website, the data for each click is recorded, and we can use data science and machine learning to predict and recommend the items shown on each customer's page. 
+\
+
+<span style="color:blue">
+**Q2.** Read and type the following in R Markdown
+</span>
+<div style="float: right"><span style="color:blue">[3 pts.]</span></div>
+\
+\
+
+# **Normal Distribution**\
+
+\
+In probability theory, the normal (or Gaussian or Gauss or Laplace-Gausss) distribution is a very common continuous probability distribution. Normal distributions are important in statistics and are often used in the natural andsocial science to represent real-valued random variables whoes distributions are not known. A random variable with a Gaussian distribution is said to be normally distributed and is called a normal deviate. 
+\
+The normal distribution is useful because of the central limit theorem. In its most general form, under some conditions(which include finite variance), it states that averages of samples of observations of random variables independetly drawn from independent distributions conberge in distribution on the normal, that is, they become normally distributed when the number of observations is sufficiently large. Physical quantities that are expected to be the sum of many independnet processes (such as measurement errors) often have distributions that are nearly normal. Moreover, many results and methods(such as propagation of uncertainty and least squares parameter fitting) can be derived analytically in explicit form when the relevant variables are normally distributed. 
+\
+The normal distribution is sometimes informally called the bell curve. However, many other distributions are bell shaped(such as Cauchy, Student's t,and logistic distribution).
+The probablity density of the normal distribution is\
+\
+<center>
+$$f\left(x\middle|\mu,\sigma^2\right)={\frac{1}{\sqrt{2\pi\sigma^2}}}^{-\frac{\left(x-\mu\right)^2}{2\sigma^2}};-\infty<\mu<\infty,\sigma>0$$
+</center>
+
+\
+
+<span style="color:blue">
+**Q3.** Insert an R chunk. Calculate the mean and standard deviation for the given assignment 1 scores. 
+<div style="float: right"><span style="color:blue">[2 pts.]</span></div>
+\
+$$6,4,6,9,10,5,7,6,8$$
+```{r}
+data<-c(6,4,6,9,10,5,7,6,8)
+mean(data)
+sd(data)
+```
+
+\
+\
+<table><tr><td bgcolor=plum>For question 2&3,in my draft there is no margin and fill the whole page after I knitted it. However, it became normal in margin after I copy exactly the same code here.</td></tr></table>
+\

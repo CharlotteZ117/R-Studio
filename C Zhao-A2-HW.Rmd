@@ -1,0 +1,102 @@
+<center>
+# MATH 261: Assignment #2
+### <span style="color:lightblue">**Charlotte Zhao **</span>
+<font color=salmon>**Due Date:** Wednesday, 2/15/2023, by 11:59 PM </font>
+</center>
+
+\
+
+<h3><span style="color:red">**Important Instructions:**</span></h3>
+- **Work independently and do not consult or share anything with anyone. If it happens, I will immediately inform the appropriate authorities for their quick action. ** \
+
+- **Show both your R codes and results in the HTML file.**\
+- **Save your .RMD file/.HTML file as your Last Name_A1.RMD/Last Name_A2.HTML**\
+- **Submit your Assignment #2 (both .RMD and .HTML files) on Moodle.** \
+- **You must follow the <span style="text-decoration:underline"> 
+[DePauw's Academic Integrity Policy.](https://www.depauw.edu/academics/academic-resources/academic-integrity/)</span>
+**
+
+___
+
+\
+\
+<font size=4>
+<span style="color:blue">
+**Q1.** Read the [[Cleveland's paper](https://www.jstor.org/stable/1403527?seq=1#metadata_info_tab_contents)]{.ul} carefully (the full length paper is available on Moodle). Write a paragraph between 225 and 250 words to discuss what he suggested about the field of statistics and data science.</span>
+<div style="float: right"><span style="color:black">[4 pts.]</span></div>
+
+\
+\
+
+|       Cleveland talked about six significant parts for the data science and university departments. He suggested the amount of effort and resources that should be put in each part.
+|        First, the stimulus of data science and new tools are specific problems and the following investigation in other disciplines, such as agriculture, physics, and chemistry. We can also see the examples in life, such as the customer data collected by e-commerce company, and the medicine efficiency and experiment data conducted by the researchers. To complete the investigation, we need to develop new tools for dealing with these data. As a result, it is significant for us to analyze the data.
+|       Then, we need to build models and methods for the data we already have. We already have some well-developed model, such as the linear regression model. However, many fields have no model and method.
+|       Also, we need to compute with data under the support of appropriate database system, computer hardware and software. Computational algorithm makes a large impact on data science, such as the Bayesian method.
+|       Moreover, we also need to learn tool evaluation and theory. It includes both mathematical and non-mathematical theory. The mathematical theory is the fundamental basis for data science. Non-mathematical, such as Bayesian method which combines the data and information external to the data, is also importan.
+
+\
+\
+
+<span style="color:blue">
+**Q2.** Some states took the initiative to help reduce consumers’ grocery bills as inflation spiked by curbing sales taxes on groceries. The following table shows the thirteen states who cut (or remained the same) their sales taxes on groceries. 
+Suppose you visited one of the states and spent $557 on groceries before the tax. Write an R function to determine the total price you paid for the state you visited and run your function separately for each state.</span>
+<div style="float: right"><span style="color:black">[4 pts.]</span></div>
+\
+```{r}
+price<-function(bill,grocerytax,statename)
+{
+  totalprice<-bill*(1+grocerytax/100)
+  cat("The total price that I pay in", statename, "is $", totalprice,".")
+}
+
+```
+
+```{r,echo=FALSE}
+price(557,4,"Alabama")
+price(557,0.125,"Arkansas")
+price(557,4,"Hawaii")
+price(557,6,"Idaho")
+price(557,1,"Illinois")
+price(557,6,"Kansas")
+price(557,7,"Mississippi")
+price(557,1.225,"Missouri")
+price(557,4.5,"Oklahoma")
+price(557,4.5,"South dakota")
+price(557,4,"Tennessee")
+price(557,1.75,"Utah")
+price(557,2.5,"Virginia")
+
+```
+
+
+\
+\
+<span style="color:blue">
+**Q3.** create a vector, called $x$, that consists of the first 200 numbers. Write a code to add the first 200 numbers using both `for loop` and `while loop`.
+<div style="float: right"><span style="color:black">[2 pts.]</span></div>
+\
+\
+```{r}
+x<-1:200
+result<-0
+for(i in x)
+{
+  result<-result+i
+}
+cat("For loop: The sum of the first 200 positive integers is",result,".")
+```
+```{r}
+y<-1
+result1<-0
+while(y<=200)
+{
+  result1<-result1+y
+  y<-y+1
+}
+cat("while loop: The sume of the first 200 positive integers is", result1,".")
+```
+
+
+
+\
+\
