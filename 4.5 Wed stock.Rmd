@@ -1,0 +1,102 @@
+---
+title: "4.5 Wed stock"
+output: html_document
+date: "2023-04-05"
+---
+
+install.packages("quantmod")
+("APPL")need to follow the name of tickers
+```{r}
+library(quantmod)
+APPL<-loadSymbols("AAPL",auto.assign=F,
+                  from="2000-01-01",to="2023-04-06")
+tail(APPL)
+
+AMZN<-loadSymbols("AMZN",auto.assign=F,
+                  from="2023-01-01",to="2023-04-06")
+tail(AMZN)
+```
+```{r}
+chartSeries(APPL,
+            type="line",
+            subset="2021",
+            theme=chartTheme("white"))
+chartSeries(APPL,
+            type="bar",
+            subset="2021",
+            theme=chartTheme("white"))
+chartSeries(APPL,
+            tyoe="candlesticks",
+            subset="2021-10::2021-12",
+            up.col="green",
+            down.col="red",
+            theme=chartTheme("white"))
+```
+
+
+```{r}
+chartSeries(AMZN,
+            type="line",
+            subset="2023",
+            theme=chartTheme("white"))
+```
+```{r}
+class(APPL)
+APPL1<-as.data.frame(APPL)
+class(APPL1)
+tail(APPL1)
+```
+Add a new column called "date" to the data frame
+```{r}
+library(dplyr)
+library(lubridate)
+```
+```{r}
+APPL2<-APPL1%>%
+  mutate(date=rownames(.))%>%
+  select(everything())
+tail(APPL2)
+
+str(APPL2)
+```
+The date is like chr
+```{r}
+APPL2$date1<-ymd(APPL2$date)
+str(APPL2)
+```
+The data is Date type
+```{r}
+APPL2$year<-year(APPL2$date1)
+APPL2$month<-month(APPL2$date1)
+APPL2$day<-day(APPL2$date1)
+tail(APPL2)
+```
+```{r}
+APPL3<-APPL2%>%
+  mutate(year=year(APPL2$date1),
+    month= month(APPL2$date1),
+    day=day(date1))
+tail(APPL3)
+str(APPL3)
+```
+Plotting by year
+```{r}
+library(ggplot2)
+#APPL2%>%   #or data=APPL2
+  ggplot(data=APPL2,aes(x=year,y=AAPL.Close))+
+  geom_line()
+  
+APPL2%>%
+  ggplot(aes(x=date1,y=AAPL.Close))+
+  geom_line()
+```
+Combine the year month date to a single column in a date format
+```{r}
+
+APPL4<-APPL3%>%
+  mutate(date2=APPL3,paste(year,month,day,sep="-"))
+tail(APPL4)
+```
+
+
+

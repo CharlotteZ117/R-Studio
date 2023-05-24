@@ -1,0 +1,122 @@
+---
+title: "4.3 Mon Date lubridate"
+output: html_document
+date: "2023-04-05"
+---
+```{r}
+# Week 9, Monday, April 3, 2023
+#----------------------------------
+
+# Current date and time
+
+Sys.Date()
+
+date()
+
+# Generate a vector of five dates incremented by 10 days
+
+myDates <- seq(Sys.Date(), length=5, by="10 day")
+
+str(myDates)
+
+weekdays(myDates)
+
+weekdays(myDates+1)
+
+
+# Date differences in days
+
+myDates[2]-myDates[1]
+myDates[1]-myDates[2]
+
+# Calculate your age (in years)
+Sys.Date()-as.Date("2000-01-01")   # in days
+(Sys.Date()-as.Date("2000-01-01"))/365.25   # in years
+
+# Diffefences in time
+
+difftime(myDates[2], myDates[1], units="secs")
+difftime(myDates[2], myDates[1], units="mins")
+difftime(myDates[2], myDates[1], units="hours")
+difftime(myDates[2], myDates[1], units="days")
+difftime(myDates[2], myDates[1], units="weeks")
+
+
+# Dates are special data types
+
+tDate <- c("2023-04-03")
+str(tDate)
+
+tDate <- as.Date(tDate)
+str(tDate)
+
+# Formatting the dates
+
+format(tDate, format="%B %m %Y")
+format(tDate,"%B %m %Y")
+format(tDate,"%y %m %d")
+format(tDate,"%y-%m-%d")
+format(tDate,"%d-%b-%y")
+format(tDate,"%d-%b-%Y")
+
+
+# POSIXct
+
+x <- as.POSIXct(tDate)
+x
+
+# Time Formatting
+format(x,"%H:%M:%S")
+format(x,"%y-%m-%d")
+
+# PSOIXlt
+y <- as.POSIXlt(tDate)
+y
+
+unclass(y)
+
+release_date <- as.POSIXlt("2019-12-12 08:05:03")
+release_date
+unclass(release_date)
+
+unclass(release_date)$hour
+
+# lubricate package
+# install.packages(lubridate)
+library(lubridate)
+
+x <- now()
+month(x)
+month(x, label=TRUE)
+wday(x, label=TRUE)
+
+y <- mdy(04032023)
+y
+str(y)
+
+month(y)
+tz(y)
+
+
+y1 <- mdy(04102023)
+y1-y
+
+
+
+transact <- read.csv('https://raw.githubusercontent.com/rsquaredacademy/datasets/master/transact.csv')
+head(transact)
+
+str(transact)
+
+# Add a column called "days_to_pay" to the dataframe by 
+# subtracting the Invoice and Payments columns
+
+transact$Invoice <- ymd(transact$Invoice)
+transact$Payment <- ymd(transact$Payment)
+
+str(transact)
+
+transact$days_to_pay <-  transact$Payment-transact$Invoice
+head(transact)
+```
+

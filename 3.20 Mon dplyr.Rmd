@@ -1,0 +1,92 @@
+---
+title: "3.20 Mon dplyr"
+output: html_document
+date: "2023-03-20"
+---
+需要最后filter的笔记!!
+3.20 Mon
+dplyr:
+filter()picks cases based on values\
+select()pics variables based on names\
+arrange()changes the order of the rows\
+mutate()add new variables that are function of existing variables\
+summarise()reduces multiple variables to a single
+
+```{r}
+tip<-read.csv("tips.csv")
+head(tip)
+```
+Filter the records\
+Read the tips as data.frame and filter records for size=3 and tip>4\
+```{r}
+tips<-as.data.frame(tip)
+tips[tip$size==3 & tips$tip>4,]
+```
+Read the tips as data.table and filter for size=3 and tip>4
+```{r}
+library(data.table)
+dt<-as.data.table(tips)
+head(dt)
+dt[size==3 & tip>4,]
+```
+Dyplyr\
+```{r}
+
+library(dplyr)
+filter(tips,size==3,tip>4)
+```
+#Select the variables of interest\
+#select(tips,sex,size,tip)\
+select(tips,contains("i"))\
+select(tips,starts_with("s"))\
+select(tips,ends_with("s"))\
+select(tips,matches("a"))\
+\
+#Arrange or order the data
+arrange(tips,size)\
+arrange(tips,desc(size))\   #descending order\
+arrange(tips,totbill,tip)\
+\
+#mutate: create a new variable\
+```{r}
+x<-mutate(tips,tiprate=tip/totbill)
+write.csv(x,file="tips1.csv")   #save the data file
+dir()
+```
+The piping operators: %>%
+```{r}
+y<-tips %>%
+  filter(size>5)%>%
+  select(totbill,tip,sex,day,size)%>%
+  arrange(tip)%>%
+  mutate(tiprate=tip/totbill)
+y
+```
+Group by and then summarize
+```{r}
+tips%>%
+  group_by(day)%>%
+  summarize(mean(tip))
+```
+Exercise: select the records for the variable time that does not/does contain the letter "i"
+```{r}
+table(tips$time)
+filter(tips,time=="night")
+```
+NYCflights
+```{r}
+flight<-read.csv("nycflights14.csv")
+flights<-as.data.frame(flight)
+head(flights)
+```
+```{r}
+head(filter(flights,origin=="JFK",dest=="BTV"))
+```
+
+
+
+
+
+
+
+
