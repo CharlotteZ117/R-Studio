@@ -1,0 +1,108 @@
+---
+title: "HW6"
+output: html_document
+date: "2023-04-16"
+---
+
+```{r}
+flight<-read.csv("flights.csv")
+head(flight)
+
+length(flight$year)
+length(flight$month)
+length(flight$day)
+
+new<-paste(flight$year,flight$month,flight$day,sep="-")
+
+library(chron)
+x<-flight$dep_time
+head(x,10)
+x1<-times(sprintf("%d:%02d:00",x%/%100,x%%100))
+head(x1,10)
+class(x1)
+new1<-paste(new,x1)
+flight$deptime<-new1
+flight1<-subset(flight,select=c(year,month,day,deptime))
+head(flight1)
+
+```
+We did not learn the method to transfer the numeric elements to hours-minutes-seconds. Also, I cannot understand the meaning of the three digits in the flight$dep_time since there is no explanation. I thought it is a typo and used time_hour. It is painful to try and comeback to use dep_time, and search online. \
+
+```{r}
+library(dplyr)
+library(ggplot2)
+library(lubridate)
+
+flight1$date<-as.Date(new)
+flight1$weekday<-weekdays(flight1$date)
+head(flight1)
+
+mon<-sum(flight1$weekday=="Monday")
+tue<-sum(flight1$weekday=="Tuesday")
+wed<-sum(flight1$weekday=="Wednesday")
+thr<-sum(flight1$weekday=="Thursday")
+fri<-sum(flight1$weekday=="Friday")
+sat<-sum(flight1$weekday=="Saturday")
+sun<-sum(flight1$weekday=="Sunday")
+```
+
+
+```{r}
+day<-data.frame(weekday=c("Mon","Tue","Wed","Thr","Fri","Sat","Sun"),
+                total=c(mon,tue,wed,thr,fri,sat,sun))
+day
+color<-c("salmon","palegreen","lightpink","plum","palegreen3","lightblue","grey")
+  
+ggplot(day,aes(x=factor(weekday,level=c("Mon","Tue","Wed","Thr","Fri","Sat","Sun")),y=total))+
+  geom_bar(stat="identity",fill=color)+
+  xlab("Weekday")+
+  ylab("Total count for weekday in 2013")+
+  ggtitle("The Flights in Weekday in 2013")+
+  theme(axis.title.x=element_text(),
+        axis.title.y=element_text(angle=0,vjust=0.5))
+
+mean(day$total)
+```
+Findings: The bar plot shows that the departure flights in NYC are relatively low in weekends compared to weekdays. The mean depature flights is 48110 for each weekday. 
+```{r}
+#head(flight)
+#flight2<-flight%>%
+  #summarize(mean(dep_delay))%>%
+  #group_by(hour)
+
+```
+I tried pipping here but it does not work.
+```{r}
+meandepature<-aggregate(data=flight,dep_delay~hour,FUN=mean)
+head(meandepature)
+
+ggplot(meandepature,aes(x=hour,y=dep_delay))+
+  geom_line(color="blue")+
+  theme(axis.title.y=element_text(angle=0))
+```
+```{r}
+flight1$dep_delay<-flight$dep_delay
+daydelay<-aggregate(data=flight1,dep_delay~weekday,FUN=mean)
+
+ggplot(flight1,aes(x=weekday,y=dep_delay))+
+  geom_bar(stat="identity",fill="salmon")
+```
+We should depart at Saturday as there is a minimum delay in the departure time based on the data from 2013 flights.\
+\
+**MFI**
+Money flow index is the index that can show the trend when the price and the oscillator move to the opposite way.
+```{r}
+library(quantmod)
+AMD<-loadSymbols("AMD",auto.assign=F,
+                 from="2023-03-15",to="2023-04-16")
+AMD30<-as.data.frame(AMD)
+tail(AMD30)
+```
+
+```{r}
+chartSeries(AMD30,
+            type="bars",
+            theme=chartTheme("white"))
+```
+
+

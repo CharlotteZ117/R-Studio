@@ -1,0 +1,132 @@
+---
+title: "Classwork stock"
+output: html_document
+date: "2023-04-09"
+---
+I'm Sorry that I wrote it in R markdown and it is hard to transfer to r file.
+```{r}
+library(quantmod)
+ZM1<-loadSymbols("ZM",auto.assign=F,
+                from="2020-10-01",to="2020-11-02")
+ZM20<-as.data.frame(ZM1)
+tail(ZM20)
+
+ZM2<-loadSymbols("ZM",auto.assign=F,
+                from="2021-10-01",to="2021-11-01")
+ZM21<-as.data.frame(ZM2)
+tail(ZM21)
+
+ZM3<-loadSymbols("ZM",auto.assign=F,
+                from="2022-10-01",to="2022-11-01")
+ZM22<-as.data.frame(ZM3)
+tail(ZM22)
+
+```
+
+```{r}
+library(dplyr)
+library(lubridate)
+
+```
+
+
+```{r}
+new20<-ZM20%>%
+  mutate(date=rownames(.))%>%
+  select(ZM.Close,date)
+
+new21<-ZM21%>%
+  mutate(date=rownames(.))%>%
+  select(ZM.Close,date)
+
+new22<-ZM22%>%
+  mutate(date=rownames(.))%>%
+  select(ZM.Close,date)
+
+
+```
+```{r}
+new20$day<-day(new20$date)
+new20$date20<-ymd(new20$date)
+new20$Close20<-new20$ZM.Close
+new20<-new20[,-1]
+new21$day<-day(new21$date)
+new21$date21<-ymd(new21$date)
+new21$Close21<-new21$ZM.Close
+new21<-new21[,-1]
+new22$day<-day(new22$date)
+new22$date22<-ymd(new22$date)
+new22$Close22<-new22$ZM.Close
+new22<-new22[,-1]
+str(new20)
+str(new21)
+str(new22)
+tail(new20)
+tail(new21)
+tail(new22)
+```
+
+I join the three data frame.
+```{r}
+new2021<-merge(new20,new21,by="day")
+new2021
+```
+
+```{r}
+join2021<-inner_join(new20,new21,by=c("day"="day"))
+join2021
+join<-inner_join(join2021,new22,by=c("day"="day"))
+
+final<-subset(join,select=c(date20,Close20,date21,Close21,date22,Close22))
+final
+
+final1<-final
+final1$day<-1:12
+tail(final1)
+```
+
+```{r}
+library(ggplot2)
+color<-c("2020"="yellow","2021"="green","2022"="red")
+ggplot(data=final1,aes(x=day))+
+  geom_line(aes(y=Close20,color="2020"))+
+  geom_line(aes(y=Close21,color="2021"))+
+  geom_line(aes(y=Close22,color="2022"))+
+  xlab("Trade days in October")+
+  ylab("Same day Closing price")+
+  theme(axis.title.y=element_text(angle=0,vjust=0.5))
+```
+Bar plot
+```{r}
+only20<-subset(final1,select=c(day,Close20))
+only21<-subset(final1,select=c(day,Close21))
+only22<-subset(final1,select=c(day,Close22))
+only20$Close<-only20$Close20
+only21$Close<-only21$Close21
+only22$Close<-only22$Close22
+only20<-only20[,-2]
+only21<-only21[,-2]
+only22<-only22[,-2]
+only20;only21;only22
+```
+
+
+```{r}
+temporary<-rbind(only20,only21)
+bar<-rbind(temporary,only22);
+bar$year[1:12]<-"2020"
+bar$year[13:24]<-"2021"
+bar$year[25:36]<-"2022"
+
+bar
+```
+```{r}
+ggplot(data=bar,aes(fill=year,x=day,y=Close))+
+  geom_bar(position="dodge",stat="identity")+
+  xlab("Traded days in October")+
+  ylab("Same day \n Closing price")+
+  theme(axis.title.y=element_text(angle=0,vjust=0.5))
+  
+```
+
+

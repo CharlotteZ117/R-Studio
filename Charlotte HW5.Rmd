@@ -1,0 +1,83 @@
+---
+title: "HW5"
+output: html_document
+date: "2023-04-10"
+---
+
+```{r}
+library(dplyr)
+code<-read.csv("Code.csv")
+education<-read.csv("Education.csv")
+GDP<-read.csv("GDP.csv")
+
+head(code);head(education);head(GDP)
+```
+```{r}
+two<-left_join(code,education,by=c("Country"="Country"))
+three<-left_join(two,GDP,by=c("Country"="Country"))
+head(three)
+
+#b a summary of final data set
+final<-three%>%
+  filter(complete.cases(three))%>%
+  distinct()
+final
+summary(final)
+```
+```{r}
+class(final)
+final1<-as.data.frame(final)
+final1$GDP<-as.numeric(final$GDP)
+
+library(ggplot2)
+ggplot(data=final1,aes(x=GDP))+
+  geom_histogram()+
+  theme(axis.title.y=element_text(angle=0,vjust=0.5))+
+  xlab("GDP")+
+  ylab("")
+```
+
+```{r}
+library(data.table)
+final<-as.data.table(final)
+final1<-final%>%
+  filter(Rank_GDP<=25) %>%
+  filter(grepl("M",Country)|grepl("S",Country)|grepl("U",Country))
+  ##filter((Reading+Maths+Science)>1200)
+
+head(final1)
+length(final1)
+```
+```{r}
+final$Rank_GDP1<-3
+final$Rank_GDP1[final$Rank_GDP<=50]<-1
+final$Rank_GDP1[final$Rank_GDP>51&final$Rank_GDP<100]<-2
+final$SMR_score<-final$Reading+final1$Maths+final1$Science
+
+head(final1,n=10)
+```
+```{r}
+summary(final1)
+final%>%
+  group_by(Rank_GDP1)%>%
+  summarize(mean(SMR_score))
+
+```
+```{r}
+df1<-data.frame(rank=c(1,2,3),
+                score=c(1462,1384,1398))
+df1
+
+ggplot(data=df1,aes(x=rank,y=score))+
+  geom_col(width=0.3,fill=c("limegreen","yellow","salmon"))+
+  theme(axis.title.y=element_text(angle=0))+
+  ylab("Average\nScore")+
+  xlab("Rank of GDP")+
+  annotate("text",x=1,y=1485,label="1434")+
+  annotate("text",x=2,y=1390,label="1313")+
+  annotate("text",x=3,y=1400,label="1352")+
+  annotate("text",x=2,y=-100,label="The average SMR score grouped by GDP in countries")
+```
+\
+\
+Summary: This graph shows the average SMR score(Reading, maths and science) grouped by GDP in different countries. The group 1 contains the countries from ranking 1-50. The group 2 contains the countries from ranking 51-100. The 3 contains the rest. The group 1 has the highest average SMR score.
